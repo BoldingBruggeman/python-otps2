@@ -1,22 +1,22 @@
 module otps2
-   use iso_c_binding, only: c_double, c_double_complex, c_int, c_char, C_NULL_CHAR, c_f_pointer, c_loc, c_ptr
+   use iso_c_binding, only: c_double, c_int, c_char, C_NULL_CHAR, c_f_pointer, c_loc, c_ptr
 
    implicit none
 
-   include 'constit.h'   
+   include 'constit.h'
 
-   contains
+contains
 
    subroutine predict_tide(ncon, c_id, z1Re, z1Im, lat, ntime, time_mjd, zpred) bind(c)
 !DIR$ ATTRIBUTES DLLEXPORT :: predict_tide
-      integer(c_int), value, intent(in) :: ncon
-      character(kind=c_char),intent(in), target :: c_id(*)
-      complex(c_double_complex), intent(in), target :: z1Re(*)
-      complex(c_double_complex), intent(in), target :: z1Im(*)
-      real(c_double), value, intent(in) :: lat
-      integer(c_int), value, intent(in) :: ntime
-      real(c_double), intent(in), target :: time_mjd(*)
-      real(c_double), intent(inout), target :: zpred(*)
+      integer(c_int),         intent(in),    value  :: ncon
+      character(kind=c_char), intent(in),    target :: c_id(*)
+      complex(c_double),      intent(in),    target :: z1Re(*)
+      complex(c_double),      intent(in),    target :: z1Im(*)
+      real(c_double),         intent(in),    value  :: lat
+      integer(c_int),         intent(in),    value  :: ntime
+      real(c_double),         intent(in),    target :: time_mjd(*)
+      real(c_double),         intent(inout), target :: zpred(*)
 
       character(len=4),pointer   :: c_id_(:)
       real(c_double), pointer :: z1Re_(:), z1Im_(:)
@@ -37,10 +37,11 @@ module otps2
       !do i=1,ncon
       !   write (*,*) c_id_(i), z1Re_(i), z1Im_(i)
       !end do
-      call def_con_ind(c_id_,ncon,constid,ncmx,ind)
+      call def_con_ind(c_id_, ncon, constid, ncmx, ind)
       interp = .true.
       z1(:) = cmplx(z1Re_, z1Im_)
       call ptide(z1, c_id_, ncon, ind, real(lat), time_mjd_, ntime, interp, zpred_tmp)
       zpred_(:) = zpred_tmp
    end subroutine
+
 end module
