@@ -55,14 +55,26 @@ otps2_.predict_tide.argtypes = [
 ]
 otps2_.predict_tide.restype = None
 
+otps2_.predict_tide_2d.argtypes = [
+    ctypes.c_int,
+    ctypes.c_int,
+    numpy.ctypeslib.ndpointer(dtype=ctypes.c_char, ndim=2, flags=CONTIGUOUS),
+    numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=2, flags=CONTIGUOUS),
+    numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=2, flags=CONTIGUOUS),
+    numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=1, flags=CONTIGUOUS),
+    ctypes.c_int,
+    numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=1, flags=CONTIGUOUS),
+    numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=2, flags=CONTIGUOUS),
+]
+otps2_.predict_tide_2d.restype = None
+
 reference_time = datetime.datetime(1858, 11, 17)
 
 def predict_tide(components, latitude, start_time, ntime, delta_time):
     ncon = len(components)
     z1Re = numpy.empty((ncon,), dtype=float)
     z1Im = numpy.empty((ncon,), dtype=float)
-    cid = numpy.empty((ncon, 4), dtype=ctypes.c_char)
-    cid[...] = ' '
+    cid = numpy.full((ncon, 4), ' ', dtype=ctypes.c_char)
     for i, (name, (Re, Im)) in enumerate(components.items()):
         cid[i, :len(name)] = name
         z1Re[i] = Re
@@ -70,4 +82,22 @@ def predict_tide(components, latitude, start_time, ntime, delta_time):
     times = (delta_time * numpy.arange(ntime) + (start_time - reference_time).total_seconds()) / 86400.
     result = numpy.empty((ntime,), dtype=float)
     otps2_.predict_tide(ncon, cid, z1Re, z1Im, latitude, ntime, times, result)
+    return result
+
+def predict_tide_2d(components, latitude, start_time: datetime.datetime, ntime: int, delta_time: float):
+    ncon = len(components)
+    latitude = numpy.array(latitude)
+    n = latitude.size
+    z1Re = numpy.empty((ncon, n), dtype=float)
+    z1Im = numpy.empty((ncon, n), dtype=float)
+    cid = numpy.full((ncon, 4), ' ', dtype=ctypes.c_char)
+    for i, (name, (Re, Im)) in enumerate(components.items()):
+        cid[i, :len(name)] = name
+        assert Re.shape == latitude.shape
+        assert Im.shape == latitude.shape
+        z1Re[i, :] = Re
+        z1Im[i, :] = Im
+    times = (delta_time * numpy.arange(ntime) + (start_time - reference_time).total_seconds()) / 86400.
+    result = numpy.empty((ntime,) + latitude.shape, dtype=float)
+    otps2_.predict_tide_2d(n, ncon, cid, z1Re, z1Im, latitude, ntime, times, result)
     return result
