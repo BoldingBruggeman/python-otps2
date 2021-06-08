@@ -225,7 +225,7 @@
       subroutine rd_inp(modname,lltname,zuv,c_id,ncon, &
                         APRI,Geo,outname,interp)
       implicit none
-      character*80 modname,lltname,outname,tmp,rmCom
+      character*80 modname,lltname,outname,tmp
       character*1 zuv
       logical APRI,Geo,interp 
       character*4 c_id(ncmx),con
@@ -390,7 +390,7 @@
 !
       implicit none
       integer setup_file_unit
-      character*80 modname,outname,tmp,rmCom
+      character*80 modname,outname,tmp
       character*80 lltname
       character*1 zuv
       logical APRI,Geo,interp 
@@ -751,8 +751,6 @@
 
       DOUBLE PRECISION TJD,T,CIRCLE,DEL,TJLAST,D
       PARAMETER       (CIRCLE=360.0D0)
-      DOUBLE PRECISION DELTAT
-      EXTERNAL         DELTAT
       SAVE             DEL,TJLAST
       DATA TJLAST/-1.d0/
 
@@ -1730,7 +1728,6 @@
         type (c_grid), intent(in):: grid
 	real(kind=4)lat,lon,theta_lim(2),phi_lim(2)
         real(kind=8) xlon,xlat,x,y
-        logical not_in_lims_km
         theta_lim=grid%theta_lim
         phi_lim=grid%phi_lim
         not_in_lims=.false.
@@ -1797,6 +1794,7 @@
         subroutine convert_xy_ll(km_area_id,x,y,lon,lat)
         integer(kind=4) km_area_id
         real(kind=8)x,y,lon,lat,SLAT,SLON
+        real(kind=8)x2d(1,1),y2d(1,1),lon2d(1,1),lat2d(1,1)
         character*1 HEMI
 !
         HEMI='S'
@@ -1807,13 +1805,25 @@
                 call xy_ll_S(x,y,lon,lat)
               case(3)
                 SLAT=71.;SLON=70.
-                call mapxy(1,1,x,y,lon,lat,SLAT,SLON,HEMI)
+                x2d(1,1) = x
+                y2d(1,1) = y
+                call mapxy(1,1,x2d,y2d,lon2d,lat2d,SLAT,SLON,HEMI)
+                lon = lon2d(1,1)
+                lat = lat2d(1,1)
               case(4)
                 SLAT=71.;SLON=-70.
-                call mapxy(1,1,x,y,lon,lat,SLAT,SLON,HEMI)
+                x2d(1,1) = x
+                y2d(1,1) = y
+                call mapxy(1,1,x2d,y2d,lon2d,lat2d,SLAT,SLON,HEMI)
+                lon = lon2d(1,1)
+                lat = lat2d(1,1)
               case(5)
                 SLAT=71.;SLON=150.
-                call mapxy(1,1,x,y,lon,lat,SLAT,SLON,HEMI)
+                x2d(1,1) = x
+                y2d(1,1) = y
+                call mapxy(1,1,x2d,y2d,lon2d,lat2d,SLAT,SLON,HEMI)
+                lon = lon2d(1,1)
+                lat = lat2d(1,1)
               endselect
 !
         return
@@ -2373,7 +2383,7 @@
         real (kind=4)lat0,lon0,gth_lim(2),gph_lim(2)
         real (kind=8) dlat,dlon,tx,ty,dx,dy,xi,xj,x,y,w00,w01,w10,w11,wtot, &
                       SLAT,SLON,sm,tlat,tlon,blat,blon
-        integer (kind=4) iGr,jGr,iloc,mGr,nloc,i0,j0,i1,j1,ipshft
+        integer (kind=4) iGr,jGr,iloc,mGr,nloc,i0,j0,i1,j1
         character*1 HEMI
 !
         if(.not.sdf%allocated)then
@@ -2922,7 +2932,7 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine rd_lmsetup(modname,lth_lim,lph_lim,c_id,ncon,outname)
       implicit none
-      character*80 modname,outname(4),tmp,rmCom,dirp,sfx
+      character*80 modname,outname(4),tmp,dirp,sfx
       character*4 c_id(ncmx),con
       real*4 lth_lim(2),lph_lim(2)
       integer k,ic,ncon
