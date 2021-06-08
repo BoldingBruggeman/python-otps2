@@ -1832,6 +1832,7 @@
         subroutine convert_ll_xy(km_area_id,lon,lat,x,y)
         integer(kind=4) km_area_id
         real(kind=8)x,y,lon,lat,SLAT,SLON
+        real(kind=8)x2d(1,1),y2d(1,1),lon2d(1,1),lat2d(1,1)
         character*1 HEMI
 !
         HEMI='S'
@@ -1842,13 +1843,25 @@
                 call ll_xy_S(lon,lat,x,y)
               case(3)
                 SLAT=71.;SLON=70.
-                call mapll(1,1,lon,lat,x,y,SLAT,SLON,HEMI)
+                lon2d(1,1) = lon
+                lat2d(1,1) = lat
+                call mapll(1,1,lon2d,lat2d,x2d,y2d,SLAT,SLON,HEMI)
+                x = x2d(1,1)
+                y = y2d(1,1)
               case(4)
                 SLAT=71.;SLON=-70.
-                call mapll(1,1,lon,lat,x,y,SLAT,SLON,HEMI)
+                lon2d(1,1) = lon
+                lat2d(1,1) = lat
+                call mapll(1,1,lon2d,lat2d,x2d,y2d,SLAT,SLON,HEMI)
+                x = x2d(1,1)
+                y = y2d(1,1)
               case(5)
                 SLAT=71.;SLON=150.
-                call mapll(1,1,lon,lat,x,y,SLAT,SLON,HEMI)
+                lon2d(1,1) = lon
+                lat2d(1,1) = lat
+                call mapll(1,1,lon2d,lat2d,x2d,y2d,SLAT,SLON,HEMI)
+                x = x2d(1,1)
+                y = y2d(1,1)
               endselect
 !
         return
