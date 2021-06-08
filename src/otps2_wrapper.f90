@@ -4,8 +4,10 @@ module otps2
    implicit none
 
    include 'constit.h'
+   include 'derived_types.h'
 
 contains
+   include 'subs.f90'
 
    subroutine predict_tide(ncon, c_id, z1Re, z1Im, lat, ntime, time_mjd, zpred) bind(c)
 !DIR$ ATTRIBUTES DLLEXPORT :: predict_tide

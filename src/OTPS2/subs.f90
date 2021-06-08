@@ -20,14 +20,12 @@
         subroutine ptide(z1,cid,ncon,ind,lat,time_mjd,ntime, &
                          interp,zpred)
         implicit none
-        include 'constit.h'
         integer ncon,ntime,k,ind(ncon),ierr
         complex z1(ncon)
         real lat,zpred(ntime)
         real*8 time_mjd(ntime),time,dh
         character*4 cid(ncon)
         integer SecondsPerDay
-        real height
         real ww(17,8)
 !        complex z1(ncon)
         complex, allocatable:: A(:)
@@ -208,7 +206,6 @@
 ! constituent names are assumed to be all in LOWER case
       subroutine def_con_ind(c_id,ncon,c_id_mod,nc,cind)
       implicit none
-      include 'constit.h'
       character*4 c_id(ncmx),c_id_mod(ncmx)
       integer nc,ncon,cind(ncon),ic1,ic2
 !
@@ -228,7 +225,6 @@
       subroutine rd_inp(modname,lltname,zuv,c_id,ncon, &
                         APRI,Geo,outname,interp)
       implicit none
-      include 'constit.h'
       character*80 modname,lltname,outname,tmp,rmCom
       character*1 zuv
       logical APRI,Geo,interp 
@@ -308,7 +304,6 @@
 ! make_a:: computes A matrix elements for one data point 
 	subroutine make_a(interp,ind,nc,time,pu,pf,w,A,l_sal) 
         implicit none
-	include 'constit.h'
         integer, parameter:: ncon = 17 ! for case of using weights.h
 !
         logical interp,l_sal
@@ -394,7 +389,6 @@
                         APRI,Geo,interp)
 !
       implicit none
-      include 'constit.h'
       integer setup_file_unit
       character*80 modname,outname,tmp,rmCom
       character*80 lltname
@@ -459,7 +453,6 @@
 !
 	subroutine nodal(dtime,lat,pu,pf)
         implicit none
-        include 'constit.h'
 !
         real*8 rad
         parameter(rad=3.141592654358979/180.D0)
@@ -1269,8 +1262,7 @@
 !------------------------------------------------------------------------------
          subroutine def_cid(nc0,cid)
          implicit none
-         include 'derived_types.h'
-         include 'constit.h'
+
          integer(kind=4) nc0,ic,jc,k
          type (constituents) cid
 !
@@ -1362,7 +1354,8 @@
 !   TO CONVERT MODIFIED JULIAN DAY, CALL THIS ROUTINE WITH                 
 !     JULIAN = MJD + 2400001                                               
 !                                                                          
-      PARAMETER (IGREG=2299161)                                           
+      INTEGER JULIAN,MM,ID,IYYY,JALPHA,JA,JB,JC,JD,JE
+      INTEGER, PARAMETER :: IGREG=2299161
       IF (JULIAN.GE.IGREG) THEN                                            
          JALPHA=INT((DBLE(JULIAN-1867216)-0.25D0)/36524.25D0)              
          JA=JULIAN+1+JALPHA-INT(0.25D0*DBLE(JALPHA))                       
@@ -1415,7 +1408,6 @@
       subroutine def_modelC(lat,lon,theta_lim,phi_lim,&
                            n,m,pmask,grid,mid,nodeID)
       implicit none
-      include 'derived_types.h'
       type (c_grid) grid
       real*4 lat,lon,lon1,theta_lim(2),phi_lim(2),dx,dy,hmax
       integer*4 i,j,n,m,k,l,kt,mid,pmask(n,m),tmp(3,3),iz,it
@@ -1464,7 +1456,7 @@
       end
 !-----------------------------------------------------------------------------------------
       integer*4 function median(a,n,m)
-      integer*4 a(n,m),n,m,i,j,c
+      integer*4 a(n,m),n,m,i,j,c,k
       integer*4, allocatable:: b(:)
       allocate(b(n*m))
       k=1
@@ -1490,7 +1482,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc 
       subroutine getDims(cgrid,grid)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) j
       real(kind=4)eps
       character cgrid*(*)
@@ -1543,7 +1534,6 @@
 ! reads in all grid arrays ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine grid_in(cgrid,grid,rc_msk)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) j,k,n_x2,n,m,nob
       real(kind=4)dt,theta_lim(2),phi_lim(2)
       logical, optional:: rc_msk
@@ -1603,7 +1593,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine getDims_model(fname,model)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) j,n,m
       real(kind=4)eps,eps1
       character*80 fname
@@ -1701,7 +1690,6 @@
 !--------------------------------------------------------------------------------
 	subroutine def_ll_lims(grid)
         implicit none
-        include 'derived_types.h'
         integer(kind=4)k
         real(kind=8)x(4),y(4),lon(4),lat(4)
         type (c_grid)grid
@@ -1739,7 +1727,6 @@
 ! ---------------------------------------------------------------------------------
         logical function not_in_lims(lat,lon,grid)
         implicit none
-        include 'derived_types.h'
         type (c_grid), intent(in):: grid
 	real(kind=4)lat,lon,theta_lim(2),phi_lim(2)
         real(kind=8) xlon,xlat,x,y
@@ -2035,8 +2022,6 @@
 !
 	subroutine loadModel_z(model,fname)
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         character fname*(*)
         type (z_model)model
         integer(kind=4) ic,j
@@ -2085,8 +2070,6 @@
 !
 	subroutine loadModel_uv(model,fname)
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         character fname*(*)
         complex*8, allocatable:: uv(:,:,:)
         integer(kind=4) ic,j
@@ -2134,8 +2117,6 @@
 ! locations - aloc, result is in P(nc,nrec)
 ! y='y' - mask off land
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         integer(kind=4)nrec,nloc,nc,nz
         type (z_model), intent(in):: model
         type (LocDict) aloc(nrec)
@@ -2208,8 +2189,6 @@
 ! locations - aloc, result is in d(nrec)
 ! y='y' - mask off land
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         integer(kind=4)nrec,nloc,nc,nz
         type (LocDict),intent(inout):: aloc(nrec)
         type (c_grid), intent(in):: mgrid
@@ -2257,8 +2236,6 @@
 ! locations - aloc, result is in Puv(nc,nrec)
 ! NOTE: grid is ALWAYS the model grid!
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         integer(kind=4)nrec,nloc,ic
         type (uv_model)model
         type (LocDict) aloc(nrec)
@@ -2388,7 +2365,6 @@
 !  Input:  grid, data locations "aloc", node ("z","u","v")
 !  Output: sparse data functional "sdf"
         implicit none
-        include 'derived_types.h'
         type (c_grid) grid
         type (LocDict) aloc
         type (sparsedf) sdf
@@ -2553,7 +2529,6 @@
 !-----------------------------------------------------------------------------
       subroutine sdf_set(rloc,nrep,grid,MASK,sdfz,sdfu,sdfv)
       implicit none
-      include 'derived_types.h'
       type (LocDict), intent(in):: rloc(nrep)
       type (c_grid), intent(in):: grid
       type (c_grid), pointer:: mgrid
@@ -2619,7 +2594,6 @@
 ! reading dimensions of local grid (with ID==id) from atlas grid
       subroutine getDims_l(cgrid,id,grid,nz,iunit)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) j,id,nz,iunit
       character cgrid*(*)
       type (c_grid) grid
@@ -2637,7 +2611,6 @@
 ! reading dimensions of local model (with ID==id) from atlas
       subroutine getDims_z_l(fname,id,nz,iunit,model)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) j,id,nz,iunit
       character fname*(*)
       type (z_model) model
@@ -2655,7 +2628,6 @@
 ! reading dimensions of local model (with ID==id) from atlas
       subroutine getDims_u_l(fname,id,nu,nv,iunit,model)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) j,id,nu,nv,iunit
       character fname*(*)
       type (uv_model) model
@@ -2673,7 +2645,6 @@
 ! (correct record is already set by getDims_l, close iunit file when done)
       subroutine grid_in_l(iunit,grid,nz)
       implicit none
-      include 'derived_types.h'
       integer(kind=4)nz,iunit,k
       integer(kind=4),allocatable:: i(:),j(:)
       type (c_grid) grid
@@ -2698,7 +2669,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine rd_lgrid_header(grid,iunit,nz)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) iunit,nz
       real(kind=4) eps
       type (c_grid) grid
@@ -2721,7 +2691,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine rd_lz_header(model,iunit,nz)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) iunit,nz
       real(kind=4) eps
       type (z_model) model
@@ -2744,7 +2713,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine rd_lu_header(model,iunit,nu,nv)
       implicit none
-      include 'derived_types.h'
       integer(kind=4) iunit,nu,nv
       real(kind=4) eps
       type (uv_model) model
@@ -2868,8 +2836,6 @@
 !-------------------------------------------------------------
 	subroutine loadModel_z_l(iunit,model,nz)
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         type (z_model)model
         integer(kind=4) ic,nz,k,iunit,i,j
         real(kind=4) xlim(2),ylim(2)
@@ -2910,8 +2876,6 @@
 !-------------------------------------------------------------
 	subroutine loadModel_uv_l(iunit,model,nu,nv)
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         type (uv_model)model
         integer(kind=4) ic,nu,nv,k,iunit,j
         real(kind=4) xlim(2),ylim(2)
@@ -2958,7 +2922,6 @@
 !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine rd_lmsetup(modname,lth_lim,lph_lim,c_id,ncon,outname)
       implicit none
-      include 'constit.h'
       character*80 modname,outname(4),tmp,rmCom,dirp,sfx
       character*4 c_id(ncmx),con
       real*4 lth_lim(2),lph_lim(2)
@@ -3010,8 +2973,6 @@
 ! locations - aloc, result is in Puv(nc,nrec)
 ! NOTE: grid is ALWAYS the model grid!
         implicit none
-        include 'derived_types.h'
-        include 'constit.h'
         integer(kind=4)nrec,nloc,ic
         type (uv_model)model
         type (LocDict) aloc(nrec)
@@ -3084,7 +3045,6 @@
 !------------------------------------------------------------------------------------
         subroutine write_grid(dloc,ndat,depth,outname,nl,ml,th_lim,ph_lim)
         implicit none
-        include 'derived_types.h'
         type (LocDict), intent(in):: dloc(ndat)
         real(kind=4) depth(ndat),th_lim(2),ph_lim(2)
         integer(kind=4) nl,ml,idum,i,j,k,ndat
@@ -3117,7 +3077,6 @@
         subroutine write_z(dloc,ndat,z1,depth,outname,nl,ml,th_lim,ph_lim, &
                    nc,ncon,cind,c_id)
         implicit none
-        include 'derived_types.h'
         type (LocDict), intent(in):: dloc(ndat)
         real(kind=4), intent(in):: th_lim(2),ph_lim(2),depth(ndat)
         complex(kind=4) z1(nc,ndat)
@@ -3151,7 +3110,6 @@
         subroutine write_uv(dloc,ndat,u1,v1,depth,outname,nl,ml, &
                            th_lim,ph_lim,nc,ncon,cind,c_id)
         implicit none
-        include 'derived_types.h'
         type (LocDict), intent(in):: dloc(ndat)
         real(kind=4), intent(in):: th_lim(2),ph_lim(2),depth(ndat)
         complex(kind=4) u1(nc,ndat),v1(nc,ndat)

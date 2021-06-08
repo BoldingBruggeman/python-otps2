@@ -7,7 +7,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include_directories(src/OTPS2)
 
-add_library(otps2_ SHARED src/OTPS2/subs.f90 src/OTPS2/constit.h src/otps2_wrapper.f90)
+add_library(otps2_ SHARED src/OTPS2/constit.h src/OTPS2/derived_types.h src/otps2_wrapper.f90)
 
 # Find target Python interpreter.
 find_package(PythonInterp)
