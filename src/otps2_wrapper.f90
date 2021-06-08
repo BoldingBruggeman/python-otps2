@@ -80,7 +80,7 @@ contains
       interp = .true.
       z1(:,:) = cmplx(z1Re_, z1Im_)
       do i=1,n
-         call ptide(z1(i,:), c_id_, ncon, ind, lat(i), time_mjd_, ntime, interp, zpred_tmp(i,:))
+         call ptide(z1(i,:), c_id_, ncon, ind, real(lat(i)), time_mjd_, ntime, interp, zpred_tmp(i,:))
       end do
       zpred_(:,:) = zpred_tmp
    end subroutine
