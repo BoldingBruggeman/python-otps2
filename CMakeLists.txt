@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.15)
 
 project(otps2 LANGUAGES Fortran)
 
@@ -10,8 +10,6 @@ include_directories(src/OTPS2)
 add_library(otps2_ SHARED src/OTPS2/constit.h src/OTPS2/derived_types.h src/otps2_wrapper.f90)
 
 # Find target Python interpreter.
-set(Python_FIND_STRATEGY LOCATION)
-set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 COMPONENTS Interpreter)
 
 # Build wheel
