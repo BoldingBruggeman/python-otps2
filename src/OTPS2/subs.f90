@@ -71,7 +71,7 @@
                         APRI,Geo,outname,interp)
       implicit none
       include 'constit.h'
-      character*80 modname,lltname,outname,tmp,rmCom
+      character*80 modname,lltname,outname,tmp   ! JB 2024-05-14 drop rmCom which is a function
       character*1 zuv
       logical APRI,Geo,interp 
       character*4 c_id(ncmx),con
@@ -131,7 +131,7 @@
       real*4 th_lim(2),ph_lim(2)
       character*4 c_id(ncmx),ctmp
       character*80 modname
-      character*80 hname,uname,gname,fname,rmCom,tname
+      character*80 hname,uname,gname,fname,tname   ! JB 2024-05-14 drop rmCom which is a function
       character*80 xy_ll_sub
       character*1 zuv
       integer*4 k,nc,n,m,funit,ic,icc,nca 
@@ -279,7 +279,7 @@
          integer i0,j0,i1,j1 
          real ww(0:1,0:1)
          integer iw(0:1),jw(0:1)
-         integer ipshft,sm
+         integer sm   ! JB 2024-05-14 drop ipshft which is a function
 !
          real w00,w01,w10,w11,wtot
 !
@@ -823,6 +823,7 @@
 !   TO CONVERT MODIFIED JULIAN DAY, CALL THIS ROUTINE WITH                 
 !     JULIAN = MJD + 2400001                                               
 !                                                                          
+      IMPLICIT INTEGER (I-N), REAL (A-H, O-Z)   ! JB 2024-05-14 use default Fortran typing
       PARAMETER (IGREG=2299161)                                           
       IF (JULIAN.GE.IGREG) THEN                                            
          JALPHA=INT((DBLE(JULIAN-1867216)-0.25D0)/36524.25D0)              
@@ -902,7 +903,7 @@
         real*8 time_mjd(ntime),time,dh
         character*4 cid(ncon)
         integer SecondsPerDay
-        real height
+        ! JB 2024-05-14 drop height which is a function
         complex, allocatable:: A(:)
 ! nodal arguments shoud be real*8
         real*8 pu(ncmx),pf(ncmx),dlat,t_mjd
@@ -996,7 +997,7 @@
          real*8, parameter:: PP=282.8D0 
          EQUIVALENCE (SHPN(1),S),(SHPN(2),H),(SHPN(3),P),(SHPN(4),omega) 
 
-         character*4 lower_case
+         ! JB 2024-05-14 drop lower_case which is a function
          character*4 cmin(18)
          data cmin/'2q1 ','sig1','rho1','m1  ','m1  ','chi1','pi1 ','phi1', &
                    'the1','j1  ','oo1 ','2n2 ','mu2 ','nu2 ','lam2','l2  ', &
@@ -1413,7 +1414,7 @@
          real xi,xj,x,y                 ! 
          integer i0,j0,i1,j1 
          integer iw(0:1),jw(0:1)
-         integer ipshft,sm
+         integer sm   ! JB 2024-05-14 drop ipshft which is a function
 !
 
 !
@@ -1488,7 +1489,7 @@
       implicit none
       include 'constit.h'
       character*4 c_id(ncmx)
-      character*80 modname,hname,uname,gname,fname,rmCom,xy_ll_sub
+      character*80 modname,hname,uname,gname,fname,xy_ll_sub   ! JB 2024-05-14 drop rmCom which is a function
       integer funit,ncatlas,km
 !
       uname=' '
