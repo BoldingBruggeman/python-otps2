@@ -1,11 +1,11 @@
-DATA/Model_atlas           ! 1. tidal model control file
-lat_lon_time               ! 2. latitude/longitude/<time> file
+                           ! 1. tidal model control file
+lat_lon_time               ! 2. latitude/longitude/time file
 z                          ! 3. z/U/V/u/v
-m2                         ! 4. tidal constituents to include
+m2,s2,n2,k2,k1,o1,p1,q1    ! 4. tidal constituents to include
 AP                         ! 5. AP/RI
 oce                        ! 6. oce/geo
 1                          ! 7. 1/0 correct for minor constituents
-sample.out                 ! 8. output file (ASCII)
+tmp                        ! 8. output file (ASCII)
 
 
 Comments on lines 1-7
@@ -30,12 +30,12 @@ Comments on lines 1-7
    unless they are located in /DATA (download default).
 
    4th line in Model_* file is used ONLY for models calculated on
-   uniform grid in km. Converting functions are provided with
+   uniform grid in km. Converting functions are provided with 
    current version of OTPS. Please upgrade OTPS if a function is
    missing.
 
-2. latitude, longitude and time file is an ASCII file, consisting
-   either of 2 OR 8 columns:
+2. latitude, longitude and time file is an ASCII file, consisting 
+   eighter of 2 OR 8 columns:
    latitude (degrees) longitude (degrees) [yyyy mm dd hh mm ss]
    Common sign convention:
    lat>0 - degrees North, lon>0 - degrees East
@@ -55,11 +55,11 @@ Comments on lines 1-7
            Only used when extracting HC.
            May leave blank, if predicting tide.
 
-6. Only needed for tide prediction. 1/0 - Do/Not correct for the minor
-   constituents defined in weights.h. Only works for 8 constituents:
-   m2,s2,n2,k2,k1,o1,p1,q1
-
 7. oce/geo - extract ocean/geocentric HC for elevations only.
             Geocentric tide is appropriate for comparison to or
             correction of altimetry data.
             May leave blank if not z on line 3.
+
+6. Only needed for tide prediction. 1/0 - Do/Not correct for the minor
+   constituents. Only works if 8 major constituents included.
+

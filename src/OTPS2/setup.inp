@@ -1,11 +1,11 @@
-DATA/Model_atlas           ! 1. tidal model control file
+DATA/Model_tpxo9.v2        ! 1. tidal model control file
 lat_lon_time               ! 2. latitude/longitude/<time> file
 z                          ! 3. z/U/V/u/v
-m2,s2                      ! 4. tidal constituents to include
+m2,s2,k1,o1                ! 4. tidal constituents to include
 AP                         ! 5. AP/RI
 oce                        ! 6. oce/geo
 1                          ! 7. 1/0 correct for minor constituents
-sample.out                 ! 8. output file (ASCII)
+z.out                      ! 8. output file (ASCII)
 
 
 Comments on lines 1-7
@@ -18,21 +18,13 @@ Comments on lines 1-7
    bathymetry grid file name
    {name of function to convert x,y to lon,lat}
 
-   Leave line 1 blank, if are not sure which model to use. In this case
-   all models from "model.list" are checked. File "./model.list" should
-   contain all your DATA/Model_* files and is done as:
-
-   ls -1 DATA/Model_*>model.list
-
-   Please have all Model_* files ready in subdirectory DATA
-
    Please show FULL path to the model files in the "Model_*" file
    unless they are located in /DATA (download default).
 
    4th line in Model_* file is used ONLY for models calculated on
    uniform grid in km. Converting functions are provided with
-   current version of OTPS. Please upgrade OTPS if a function is
-   missing.
+   current version of OTPS. Try downloading latest OTPS, if the 
+   converting function is missing in your version.
 
 2. latitude, longitude and time file is an ASCII file, consisting
    either of 2 OR 8 columns:
@@ -56,8 +48,8 @@ Comments on lines 1-7
            May leave blank, if predicting tide.
 
 6. Only needed for tide prediction. 1/0 - Do/Not correct for the minor
-   constituents defined in weights.h. Only works for 8 constituents:
-   m2,s2,n2,k2,k1,o1,p1,q1
+   constituents. Only works if 8 major constituents: m2,s2,n2,k2,k1,o1,p1,q1
+   are included in line 4 (or line 4 left blank).
 
 7. oce/geo - extract ocean/geocentric HC for elevations only.
             Geocentric tide is appropriate for comparison to or
